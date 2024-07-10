@@ -1,30 +1,20 @@
-local Services = setmetatable({}, { __index = function(Self, Key) return game.GetService(game, Key) end })
 local Client = Services.Players.LocalPlayer
 local SMethod = (WebSocket and WebSocket.connect)
 
 if not SMethod then return Client:Kick("Executor is too shitty.") end
 
 local Main = function()
-	local Success, ws = pcall(SMethod, "ws://localhost:9000/")
+	local ws = WebSocket.connect("ws://localhost:9000")
     	local Closed = false
 
-	if not Success then return end
-
-	ws:Send(Services.HttpService:JSONEncode({
+	ws:Send(game:GetService("HttpService"):JSONEncode({
 		Method = "Authorization",
 		Name = Client.Name
 	}))
-	task.spawn(function()
-		while Closed == false do
-			ws:Send(Services.HttpService:JSONEncode({
-            		Method = "Ping",
-            		Timestamp = tick()  -- Include a timestamp if needed
-        		}))
-			task.wait(2)
-		end
-	end)
+
 	ws.OnMessage:Connect(function(Unparsed)
-		local Parsed = Services.HttpService:JSONDecode(Unparsed)
+		print(Unparsed)
+		local Parsed = game:GetService("HttpService"):JSONDecode(Unparsed)
 		print(Parsed)
 		print(Parsed.Method)
 		if (Parsed.Method == "Execute") then
@@ -43,6 +33,15 @@ local Main = function()
         	Closed = true
     	end)
 
+	task.spawn(function()
+		while Closed == false do
+			ws:Send(game:GetService("HttpService"):JSONEncode({
+            		Method = "Ping",
+            		Timestamp = tick()  -- Include a timestamp if needed
+        		}))
+			task.wait(2)
+		end
+	end)		
     repeat
         wait()  
     until Closed
