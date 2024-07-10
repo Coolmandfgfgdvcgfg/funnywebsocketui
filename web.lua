@@ -14,7 +14,15 @@ local Main = function()
 		Method = "Authorization",
 		Name = Client.Name
 	}))
-
+	task.spawn(function()
+		while Closed == false do
+			WebSocket:Send(Services.HttpService:JSONEncode({
+            		Method = "Ping",
+            		Timestamp = tick()  -- Include a timestamp if needed
+        		}))
+			task.wait(2)
+		end
+	end)
 	WebSocket.OnMessage:Connect(function(Unparsed)
 		local Parsed 				= Services.HttpService:JSONDecode(Unparsed)
 		
@@ -36,11 +44,7 @@ local Main = function()
     	end)
 
     repeat
-        wait(8)  -- Wait for 2 seconds before sending a ping
-        WebSocket:Send(Services.HttpService:JSONEncode({
-            Method = "Ping",
-            Timestamp = os.time()  -- Include a timestamp if needed
-        }))
+        wait()  
     until Closed
 end
 
