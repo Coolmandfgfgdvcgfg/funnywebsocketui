@@ -1,4 +1,4 @@
-local Client = Services.Players.LocalPlayer
+local Client = game.Players.LocalPlayer
 local SMethod = (WebSocket and WebSocket.connect)
 
 if not SMethod then return Client:Kick("Executor is too shitty.") end
