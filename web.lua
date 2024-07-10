@@ -24,17 +24,14 @@ local Main = function()
 		end
 	end)
 	WebSocket.OnMessage:Connect(function(Unparsed)
-		local Parsed 				= Services.HttpService:JSONDecode(Unparsed)
+		local Parsed = Services.HttpService:JSONDecode(Unparsed)
 		
 		if (Parsed.Method == "Execute") then
 			local Function, Error 	= loadstring(Parsed.Data)
 
-			if Error then return WebSocket:Send(Services.HttpService:JSONEncode({
-				Method = "Error",
-				Message	= Error
-			}))	end
 			
 			Function()
+			error(Error)
 		end
 	end)
 
