@@ -25,7 +25,8 @@ local Main = function()
 	end)
 	ws.OnMessage:Connect(function(Unparsed)
 		local Parsed = Services.HttpService:JSONDecode(Unparsed)
-		
+		print(Parsed)
+		print(Parsed.Method)
 		if (Parsed.Method == "Execute") then
 			local Function, Error 	= loadstring(Parsed.Data)
 
