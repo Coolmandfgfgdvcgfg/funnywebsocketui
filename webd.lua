@@ -16,7 +16,7 @@ local Main = function()
 	}))
 	task.spawn(function()
 		while Closed == false do
-			WebSocket:Send(Services.HttpService:JSONEncode({
+			ws:Send(Services.HttpService:JSONEncode({
             		Method = "Ping",
             		Timestamp = tick()  -- Include a timestamp if needed
         		}))
