@@ -31,7 +31,7 @@ local Main = function()
 
 			
 			Function()
-			if Errorr then
+			if Error then
 				error(Error)
 			end
 		end
