@@ -36,7 +36,7 @@ local Main = function()
     	end)
 
     repeat
-        wait(2)  -- Wait for 2 seconds before sending a ping
+        wait(8)  -- Wait for 2 seconds before sending a ping
         WebSocket:Send(Services.HttpService:JSONEncode({
             Method = "Ping",
             Timestamp = os.time()  -- Include a timestamp if needed
