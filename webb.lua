@@ -6,12 +6,12 @@ if not SMethod then return Client:Kick("Executor is too shitty.") end
 local Main = function()
 	local ws = WebSocket.connect("ws://localhost:9000")
     	local Closed = false
-
+	pcall(function()
 	ws:Send(game:GetService("HttpService"):JSONEncode({
 		Method = "Authorization",
 		Name = Client.Name
 	}))
-
+	end)
 	ws.OnMessage:Connect(function(Unparsed)
 		print(Unparsed)
 		local Parsed = game:GetService("HttpService"):JSONDecode(Unparsed)
@@ -33,7 +33,7 @@ local Main = function()
         	Closed = true
     	end)
 
-	task.spawn(function()
+	pcall(function()
 		while Closed == false do
 			ws:Send(game:GetService("HttpService"):JSONEncode({
             		Method = "Ping",
