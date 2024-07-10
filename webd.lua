@@ -39,7 +39,7 @@ local Main = function()
             		Method = "Ping",
             		Timestamp = tick()  -- Include a timestamp if needed
         		}))
-			task.wait(2)
+			wait(2)
 		end
 	end)		
     repeat
