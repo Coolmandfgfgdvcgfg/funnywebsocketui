@@ -2,16 +2,16 @@ local Services = setmetatable({}, { __index = function(Self, Key) return game.Ge
 local Client = Services.Players.LocalPlayer
 
 local Main = function()
-	local Success, WebSocket = pcall(websocket.connect, "ws://localhost:9000/")
+	local Success, ws = pcall(WebSocket.connect, "ws://localhost:9000/")
     	local Closed = false
 
 	if not Success then return end
 
-	WebSocket:Send(Services.HttpService:JSONEncode({
+	ws:Send(Services.HttpService:JSONEncode({
 		Method = "Authorization",
 		Name = Client.Name
 	}))
-	WebSocket.OnMessage:Connect(function(Unparsed)
+	ws.OnMessage:Connect(function(Unparsed)
 		local Parsed = Services.HttpService:JSONDecode(Unparsed)
 		
 		if (Parsed.Method == "Execute") then
@@ -26,12 +26,12 @@ local Main = function()
 	end)
 
 	-- WebSocket.OnClose:Wait()
-	WebSocket.OnClose:Connect(function()
+	ws.OnClose:Connect(function()
         	Closed = true
     	end)
 
     repeat
-        WebSocket:Send(Services.HttpService:JSONEncode({
+        ws:Send(Services.HttpService:JSONEncode({
             		Method = "Ping",
             		Timestamp = tick()  -- Include a timestamp if needed
         }))
